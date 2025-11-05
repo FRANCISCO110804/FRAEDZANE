@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - FRAEDZANE</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .login-container {
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      background: white;
+    }
+    .login-container h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+    }
+    .logo {
+      max-width: 150px;
+      display: block;
+      margin: 0 auto 20px;
+    }
+    #msg {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      min-height: 20px;
+    }
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-container">
+  <img src="logo sweb.jpg" alt="FRAEDZANE" class="logo">
+  <h2>Acceso seguro</h2>
+
+  <input id="usuario" type="text" placeholder="Usuario" required>
+  <input id="password" type="password" placeholder="Contraseña" required>
+  <button id="btnLogin">Ingresar</button>
+
+  <p id="msg"></p>
+</div>
+
+<script type="module">
+  import { verificarCredenciales } from "./firebase.js";
+
+  document.getElementById("btnLogin").addEventListener("click", async () => {
+    const usuario = document.getElementById("usuario").value;
+    const contrasena = document.getElementById("password").value;
+    const btnLogin = document.getElementById("btnLogin");
+    const msg = document.getElementById("msg");
+
+    if (!usuario || !contrasena) {
+      msg.style.color = "red";
+      msg.textContent = "Por favor, complete todos los campos";
+      return;
+    }
+
+    try {
+      btnLogin.disabled = true;
+      btnLogin.innerHTML = '<span class="spinner"></span>Verificando...';
+      msg.textContent = "";
+
+      const esValido = await verificarCredenciales(usuario, contrasena);
+
+      if (esValido) {
+        msg.style.color = "green";
+        msg.textContent = "✓ Acceso correcto";
+        sessionStorage.setItem('usuarioAutenticado', 'true');
+        setTimeout(() => window.location.href = "index.html", 500);
+      } else {
+        msg.style.color = "red";
+        msg.textContent = "Usuario o contraseña incorrectos";
+      }
+    } catch (error) {
+      msg.style.color = "red";
+      msg.textContent = "Error al verificar credenciales";
+      console.error(error);
+    } finally {
+      btnLogin.disabled = false;
+      btnLogin.textContent = "Ingresar";
+    }
+  });
+
+  // También permitir enviar con Enter
+  document.getElementById("password").addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      document.getElementById("btnLogin").click();
+    }
+  });
+</script>
+
+</body>
+</html>

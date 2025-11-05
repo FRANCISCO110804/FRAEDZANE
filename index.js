@@ -4,14 +4,25 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Servir archivos estáticos desde la carpeta views
+// Para ver todos los requests en la consola
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  next();
+});
+
+// Servir archivos estáticos desde views/
 app.use(express.static(path.join(__dirname, 'views')));
 
-// Ruta raíz que envía el index.html
+// Redirigir / a login.html
 app.get('/', (req, res) => {
-	res.sendFile(path.join(__dirname, 'views', 'index.html'));
+  console.log('Redirigiendo a /login.html');
+  res.redirect('/login.html');
 });
 
 app.listen(PORT, () => {
-	console.log(`Servidor escuchando en http://localhost:${PORT}`);
+  console.log('======================================');
+  console.log(`Servidor iniciado en puerto ${PORT}`);
+  console.log(`URL principal: http://localhost:${PORT}`);
+  console.log(`URL login: http://localhost:${PORT}/login.html`);
+  console.log('======================================');
 });

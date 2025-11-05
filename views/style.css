@@ -211,3 +211,45 @@ body {
   }
 }
 
+
+/* ===========================
+   ESTILOS DEL LOGIN
+=========================== */
+.login-container {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  text-align: center;
+  width: 300px;
+  margin: auto;
+  margin-top: 100px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+}
+
+.login-container h2 {
+  color: #ff007a;
+  margin-bottom: 20px;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 2px solid #ff007a;
+}
+
+.login-container button {
+  width: 100%;
+  padding: 12px;
+  background: #ff007a;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.login-container button:hover {
+  background: #e6006e;
+}
